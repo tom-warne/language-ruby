@@ -8,7 +8,7 @@
     'include': 'source.ruby'
   }
   {
-    'begin': '\\b(?<!\\.|::)(gem|git|group|platforms|ruby|source)\\b(?![?!])'
+    'begin': '\\b(?<!\\.|::)(gem|git|git_source|group|platforms|ruby|source)\\b(?![?!])'
     'captures':
      '1':
        'name': 'keyword.other.special-method.ruby.gemfile'
