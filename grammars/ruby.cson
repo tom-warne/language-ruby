@@ -173,7 +173,7 @@
   }
   {
     'comment': ' everything being a method but having a special function is a..'
-    'match': '\\b(belongs_to|has_many|has_one|validate|validates|validates_presence_of|accepts_nested_attributes_for|after_create|before_create|before_update|before_save|before_destroy|after_update|after_destroy|after_save|before_validation|initialize|new|loop|include|extend|prepend|raise|fail|attr_reader|attr_writer|attr_accessor|attr|cattr_accessor|catch|throw|private|private_class_method|module_function|public|public_class_method|protected|refine|using)\\b(?![?!])'
+    'match': '\\b(attributes|belongs_to|has_many|has_one|validate|validates|validates_presence_of|accepts_nested_attributes_for|after_create|before_create|before_update|before_save|before_destroy|after_update|after_destroy|after_save|before_validation|initialize|new|loop|include|extend|prepend|raise|fail|attr_reader|attr_writer|attr_accessor|attr|cattr_accessor|catch|throw|private|private_class_method|module_function|public|public_class_method|protected|refine|using|context|describe|it|let|subject|factory|trait|before|specify|should|ought)\\b[?!]\?'
     'name': 'keyword.other.special-method.ruby'
   }
   {
@@ -1900,6 +1900,21 @@
     'name': 'keyword.operator.logical.ruby'
   }
   {
+    'captures':
+      '1':
+        'name': 'keyword.operator.proc.ruby'
+    'match': '(&)[a-zA-Z_]\\w*'
+  }
+  {
+    'captures':
+      '1':
+        'name': 'keyword.operator.proc.ruby'
+      '2':
+        'name': 'punctuation.definition.constant.ruby'
+    'match': '(&)(:)[a-zA-Z_]\\w*[!?]?'
+    'name': 'constant.other.symbol.ruby'
+  }
+  {
     # Make sure this goes after assignment and comparison
     'match': '(?<=^|[ \\t])!|&&|\\|\\||\\^'
     'name': 'keyword.control.pseudo-method.ruby'
@@ -1909,7 +1924,7 @@
     'match': '(&\\.)\\s*(?![A-Z])'
     'captures':
       '1':
-        'name': 'punctuation.separator.method.ruby'
+        'name': 'punctuation.safe.method.ruby'
   }
   {
     'match': '(%|&|\\*\\*|\\*|\\+|-|/)'
