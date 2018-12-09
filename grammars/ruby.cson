@@ -284,7 +284,9 @@
                 'name': 'punctuation.definition.constant.hashkey.ruby'
               '4':
                 'name': 'variable.parameter.function.ruby'
-            'match': '\\G(\\&|\\*|\\*\\*|)(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))'
+              '5':
+                'name': 'variable.other.constant.ruby'
+            'match': '\\G(\\&|\\*|\\*\\*|)(?:([_a-zA-Z]\\w*(:))|([_a-z]\\w*)|([A-Z]\\w*))'
           }
           {
             'include': '$self'
