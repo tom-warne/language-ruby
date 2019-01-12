@@ -2,6 +2,8 @@ describe "Ruby grammar", ->
   grammar = null
 
   beforeEach ->
+    atom.config.set('core.useTreeSitterParsers', false)
+
     waitsForPromise ->
       atom.packages.activatePackage("language-ruby")
 
@@ -480,6 +482,22 @@ describe "Ruby grammar", ->
     expect(tokens[6]).toEqual value: ' ', scopes: ['source.ruby']
     expect(tokens[7]).toEqual value: '1', scopes: ['source.ruby', 'constant.numeric.ruby']
 
+  it "tokenizes multiline regular expressions", ->
+    tokens = grammar.tokenizeLines '''
+      regexp = /
+        foo|
+        bar
+      /ix
+    '''
+
+    expect(tokens[0][0]).toEqual value: 'regexp ', scopes: ['source.ruby']
+    expect(tokens[0][1]).toEqual value: '=', scopes: ['source.ruby', 'keyword.operator.assignment.ruby']
+    expect(tokens[0][2]).toEqual value: ' ', scopes: ['source.ruby']
+    expect(tokens[0][3]).toEqual value: '/', scopes: ['source.ruby', 'string.regexp.interpolated.ruby', 'punctuation.section.regexp.ruby']
+    expect(tokens[1][0]).toEqual value: '  foo|', scopes: ['source.ruby', 'string.regexp.interpolated.ruby']
+    expect(tokens[2][0]).toEqual value: '  bar', scopes: ['source.ruby', 'string.regexp.interpolated.ruby']
+    expect(tokens[3][0]).toEqual value: '/ix', scopes: ['source.ruby', 'string.regexp.interpolated.ruby', 'punctuation.section.regexp.ruby']
+
   it "tokenizes the / arithmetic operator", ->
     {tokens} = grammar.tokenizeLine('call/me/maybe')
     expect(tokens[0]).toEqual value: 'call', scopes: ['source.ruby']
@@ -769,6 +787,20 @@ describe "Ruby grammar", ->
   it "tokenizes <<~ Ruby 2.3.0 squiggly heredoc", ->
     lines = grammar.tokenizeLines('<<~EOS\nThis is text\nEOS')
     expect(lines[0][0]).toEqual value: '<<~EOS', scopes: ['source.ruby', 'string.unquoted.heredoc.ruby', 'punctuation.definition.string.begin.ruby']
+    expect(lines[2][0]).toEqual value: 'EOS', scopes: ['source.ruby', 'string.unquoted.heredoc.ruby', 'punctuation.definition.string.end.ruby']
+
+  it "tokenizes quoted heredoc", ->
+    # Double-quoted heredoc:
+    lines = grammar.tokenizeLines('<<~"EOS"\nThis is text\nEOS')
+    expect(lines[0][0]).toEqual value: '<<~"EOS"', scopes: ['source.ruby', 'string.unquoted.heredoc.ruby', 'punctuation.definition.string.begin.ruby']
+    expect(lines[2][0]).toEqual value: 'EOS', scopes: ['source.ruby', 'string.unquoted.heredoc.ruby', 'punctuation.definition.string.end.ruby']
+    # Single-quoted heredoc:
+    lines = grammar.tokenizeLines('<<~\'EOS\'\nThis is text\nEOS')
+    expect(lines[0][0]).toEqual value: '<<~\'EOS\'', scopes: ['source.ruby', 'string.unquoted.heredoc.ruby', 'punctuation.definition.string.begin.ruby']
+    expect(lines[2][0]).toEqual value: 'EOS', scopes: ['source.ruby', 'string.unquoted.heredoc.ruby', 'punctuation.definition.string.end.ruby']
+    # Backtick-quoted heredoc:
+    lines = grammar.tokenizeLines('<<~`EOS`\nThis is text\nEOS')
+    expect(lines[0][0]).toEqual value: '<<~`EOS`', scopes: ['source.ruby', 'string.unquoted.heredoc.ruby', 'punctuation.definition.string.begin.ruby']
     expect(lines[2][0]).toEqual value: 'EOS', scopes: ['source.ruby', 'string.unquoted.heredoc.ruby', 'punctuation.definition.string.end.ruby']
 
   it "tokenizes heredoc which includes identifier in end of a line", ->

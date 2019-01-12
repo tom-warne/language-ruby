@@ -1,13 +1,20 @@
 {
   "name": "language-ruby",
-  "version": "0.71.3",
+  "version": "0.72.14",
   "description": "Ruby language support in Atom",
+  "keywords": [
+    "tree-sitter"
+  ],
   "engines": {
     "atom": "*",
     "node": "*"
   },
+  "main": "lib/main",
   "license": "MIT",
   "repository": "https://github.com/atom/language-ruby",
+  "dependencies": {
+    "tree-sitter-ruby": "^0.13.10"
+  },
   "devDependencies": {
     "coffeelint": "^1.10.1"
   }
